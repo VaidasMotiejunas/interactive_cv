@@ -12,16 +12,13 @@
                     <div class="col-8">
                         <div class="row">
                             <div class="col-12">
-                                <p class="lead">
-                                    TODO neveikia reik normaliai su map getters ir cmputed prop pasigaut info
-                                    {{ this.$store.getters.getDataByFieldName('contacts').name }}
-                                </p>
+                                <p class="lead">{{ changeContacts.name }}</p>
                             </div>
                             <div class="col-12">
                                 <ul class="list-group list-group-horizontal">
-                                    <!-- <li class="list-group-item">{{ contacts[0].email }}</li>
-                                    <li class="list-group-item">{{ contacts[0].tel }}</li>
-                                    <li class="list-group-item">{{ contacts[0].linkedIn }}</li> -->
+                                    <li class="list-group-item">{{ changeContacts.email }}</li>
+                                    <li class="list-group-item">{{ changeContacts.tel }}</li>
+                                    <li class="list-group-item">{{ changeContacts.linkedIn }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -55,6 +52,7 @@ import draggable from 'vuedraggable';
         data() {
             return {
                 mainList: [],
+                contacts: [],
             }
         },
 
@@ -62,13 +60,36 @@ import draggable from 'vuedraggable';
             draggable
         },
 
+        mounted () {
+            this.getDataField('contacts');
+        },
+
         computed: {
-            ...mapGetters([
-                'personalData',
-            ]),
+            ...mapGetters({
+                personalData: 'personalData',
+            }),
+
+            changeContacts: {
+                get() {
+                    return this.contacts;
+                },
+                set(contacts) {
+                    this.contacts = contacts;
+                }
+            }
         },
         
         methods: {
+
+            getDataField(name, prop) {
+                this.personalData.forEach(element => {
+                    if(element.fieldName == name)
+                    {
+                        // console.log(element.data[prop]);
+                        this.changeContacts = element.data;
+                    }
+                });
+            },
 
             addElement(type) {
                 // TODO create method for adding

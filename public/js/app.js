@@ -1766,6 +1766,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
@@ -1830,22 +1860,44 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      mainList: []
+      mainList: [],
+      contacts: []
     };
   },
   components: {
     draggable: vuedraggable__WEBPACK_IMPORTED_MODULE_1___default.a
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['personalData'])),
+  mounted: function mounted() {
+    this.getDataField('contacts');
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    personalData: 'personalData'
+  }), {
+    changeContacts: {
+      get: function get() {
+        return this.contacts;
+      },
+      set: function set(contacts) {
+        this.contacts = contacts;
+      }
+    }
+  }),
   methods: {
+    getDataField: function getDataField(name, prop) {
+      var _this = this;
+
+      this.personalData.forEach(function (element) {
+        if (element.fieldName == name) {
+          // console.log(element.data[prop]);
+          _this.changeContacts = element.data;
+        }
+      });
+    },
     addElement: function addElement(type) {
       // TODO create method for adding
       console.log(type);
@@ -39259,7 +39311,96 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "card-header" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-10 col-lg-11" }, [
+          _c("a", { attrs: { href: _vm.channel.permalink, target: "blank" } }, [
+            _vm._v(_vm._s(_vm.channel.title))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2 col-lg-1" }, [
+          _vm.showFeed
+            ? _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleFeed()
+                      }
+                    }
+                  },
+                  [_vm._v("hide")]
+                )
+              ])
+            : _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleFeed()
+                      }
+                    }
+                  },
+                  [_vm._v("show")]
+                )
+              ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showFeed,
+            expression: "showFeed"
+          }
+        ]
+      },
+      [
+        _c(
+          "ul",
+          { staticClass: "list-group list-group-flush" },
+          _vm._l(_vm.channel.items, function(feed) {
+            return _c(
+              "button",
+              {
+                key: feed.id,
+                staticClass: "list-group-item list-group-item-action",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#exampleModal"
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.showModal(feed)
+                  }
+                }
+              },
+              [
+                _vm._v(
+                  "\n                " + _vm._s(feed.title) + "\n            "
+                )
+              ]
+            )
+          }),
+          0
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39301,17 +39442,25 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-12" }, [
                 _c("p", { staticClass: "lead" }, [
-                  _vm._v(
-                    "\n                                TODO neveikia reik normaliai su map getters ir cmputed prop pasigaut info\n                                " +
-                      _vm._s(
-                        this.$store.getters.getDataByFieldName("contacts").name
-                      ) +
-                      "\n                            "
-                  )
+                  _vm._v(_vm._s(_vm.changeContacts.name))
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(0)
+              _c("div", { staticClass: "col-12" }, [
+                _c("ul", { staticClass: "list-group list-group-horizontal" }, [
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v(_vm._s(_vm.changeContacts.email))
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v(_vm._s(_vm.changeContacts.tel))
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v(_vm._s(_vm.changeContacts.linkedIn))
+                  ])
+                ])
+              ])
             ])
           ]),
           _vm._v(" "),
@@ -39352,16 +39501,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12" }, [
-      _c("ul", { staticClass: "list-group list-group-horizontal" })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -53124,13 +53264,64 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   // element state
   state: {
     personalData: [{
-      field: 'contacts',
+      fieldName: 'contacts',
       data: {
         name: 'Vaidas Motiejūnas',
         email: 'vaidomotiejuno@gmail.com',
         tel: '+37067595135',
         linkedIn: 'linkedin.com/in/vaidas-motiejunas'
       }
+    }, {
+      fieldName: 'skills',
+      data: ['Leadership', 'Comunication', 'Problem solving', 'PHP', 'Laravel', 'Javascript', 'vueJs', 'mySql', 'mongoDB', 'influxDB', 'Git', 'Html', 'Css', 'Gulp', 'Bootstrap', 'Foundation-sites', 'Foundation-emails', 'Grafana', 'Autocad']
+    }, {
+      fieldName: 'languages',
+      data: {
+        lang: 'English',
+        C2: ['listening', 'reading'],
+        C1: ['speaking', 'writing']
+      }
+    }, {
+      fieldName: 'education',
+      data: {
+        main: {
+          place: 'Kaunas University of technology',
+          degree: 'Civil engineer, bachelors degree',
+          date: '2010 - 2016'
+        },
+        secondary: {
+          place: 'Baltic Talents, Kaunas',
+          degree: 'Intensive programing course, PHP',
+          date: '2017 12 01 - 2018 02 01',
+          topic: ['Laravel framework', 'Object-Oriented Programing', 'MySql', 'WordPress', 'Basic concepts and syntax', 'Algorithms']
+        }
+      }
+    }, {
+      fieldName: 'profile',
+      data: "I am working as a full stack web developer. I shifted my career about one year ago and it was one of the best decisions of my life. I am passionate about new technologies and this field does not stop to amaze me. I am constantly improving my skills by remote courses and tutorials."
+    }, {
+      fieldName: 'experience',
+      data: [{
+        name: 'Programmer',
+        company: 'UAB "Id Forty Six"',
+        date: '2018 05 - present',
+        info: ['Full stack web development', 'PHP: Laravel, Yii2', 'Tests: Feature, Unit, Codeception framework', 'Javascript: VueJs, Jquery', 'Databases: MySql, MongoDB, InfluxDB', 'CSS: Bootstrap4, Foundation-sites, Foundation-emails, MDL, Sass', 'Other: Docker, Ansimble, Gulp, Grafana, Nginx, Ubuntu']
+      }, {
+        name: 'Intern',
+        company: 'UAB "Id Forty Six"',
+        date: '2018 03 - 2018 05',
+        info: ['Full stack web application development.', 'Developed a project management application from crud version to pre release stage.', 'Laravel framework + mySQL for backend and VueJs + Bootstrap for frontend.', 'Gained experience working in linux environment and increased my skills with plain PHP, Javascript, SQL, Docker, Npm, HTML and CSS.']
+      }, {
+        name: 'project manager assistant',
+        company: 'UAB "Daistatus"',
+        date: '2016 02 - 2018 01',
+        info: ['Estimating expenditure and revenue', 'Participation in public procurements', 'Cooperation with subcontractors, customers, suppliers', 'Drafting and editing of construction type drawings and documentation', 'Continuous and rational supply off building materials and services to construction sites']
+      }, {
+        name: 'Construction manager',
+        company: 'UAB Liperus',
+        date: '2015 06 - 2016 01',
+        info: ['A secondment to participate in construction of the world\'s largest cruise ship.', 'After that I was responsible for managing construction work in a number of cities in Lithuania. The main responsibilities:', 'Driving construction workers to construction sites and providing them with necessary equipment', 'Cooperation with subcontractors, customers, suppliers', 'Drafting and editing of construction type drawings and documentation']
+      }]
     }]
   },
   // changes state
@@ -53142,10 +53333,10 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     personalData: function personalData(state) {
       return state.personalData;
     },
-    getDataByFieldName: function getDataByFieldName(state) {
+    getFieldByName: function getFieldByName(state) {
       return function (name) {
-        return state.personalData.find(function (element) {
-          return element.field === name;
+        return state.personalData.find(function (field) {
+          return field.fieldName === name;
         });
       };
     }
