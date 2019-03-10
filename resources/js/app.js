@@ -11,6 +11,19 @@ window.Vue = require('vue');
 
 import store from './store/store';
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faArrowsAlt, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(
+    faArrowsAlt,
+    faEyeSlash
+);
+
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+
+Vue.config.productionTip = false;
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -23,7 +36,8 @@ import store from './store/store';
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('main-component', require('./components/main_component.vue').default);
-Vue.component('element-component', require('./components/element_component.vue'));
+Vue.component('element-component', require('./components/element_component.vue').default);
+Vue.component('card-header', require('./components/card_header.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

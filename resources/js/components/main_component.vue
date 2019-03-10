@@ -1,10 +1,17 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-1">
-                TODO Add butons to add buttons for adding info
+            <div class="col-2">
+                <div class="btn-group-vertical" role="group" aria-label="Left toolbar">
+                    <!-- TODO create buttons dynamicaly based on personal data from store -->
+                    <button @click="addElement('skills')" type="button" class="btn btn-secondary">Skills</button>
+                    <button @click="addElement('languages')" type="button" class="btn btn-secondary">Languages</button>
+                    <button @click="addElement('education')" type="button" class="btn btn-secondary">Education</button>
+                    <button @click="addElement('profile')" type="button" class="btn btn-secondary">About me</button>
+                    <button @click="addElement('experience')" type="button" class="btn btn-secondary">Experience</button>
+                </div>
             </div>
-            <div class="col-11">
+            <div class="col-10">
                 <div class="row">
                     <div class="col-4">
                         Picture select
@@ -28,11 +35,13 @@
                             :list="mainList"
                             :options="{group: 'listItems', handle: '.handle', animation: '150'}"
                         >
-                        <element-component v-for="(element) in mainList"
-                            :key="element.id"
-                            :element="element"
-                            v-on:delete-element="deleteElement(element)"
-                        ></element-component>
+                            <element-component v-for="(element) in mainList"
+                                @change="changeElementOrder"
+                                :key="element.id"
+                                :element="element"
+                                :options="{group: 'main', handle: '.handle', animation: '150'}"
+                                v-on:delete-element="deleteElement(element)"
+                            ></element-component>
                         </draggable>
                     </div>
                 </div> 
@@ -69,6 +78,7 @@ import draggable from 'vuedraggable';
                 personalData: 'personalData',
             }),
 
+            // TODO is it really neccessary to have a computed property for this ?
             changeContacts: {
                 get() {
                     return this.contacts;
@@ -81,6 +91,10 @@ import draggable from 'vuedraggable';
         
         methods: {
 
+            changeElementOrder(){
+                //TODO change element order in mainList
+            },
+
             getDataField(name, prop) {
                 this.personalData.forEach(element => {
                     if(element.fieldName == name)
@@ -92,8 +106,20 @@ import draggable from 'vuedraggable';
             },
 
             addElement(type) {
-                // TODO create method for adding
-                console.log(type);
+                var element = this.$store.getters.getFieldByName(type);
+
+                var addElement = true;
+                this.mainList.forEach(element => {
+                    if(element.fieldName == type)
+                    {
+                        addElement = false;
+                    }
+                });
+
+                if(addElement)
+                {
+                    this.mainList.push(element);
+                }
             },
 
             deleteElement(element) {

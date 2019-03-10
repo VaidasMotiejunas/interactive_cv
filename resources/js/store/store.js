@@ -36,18 +36,15 @@ const store = new Vuex.Store({
                 ]
             },
             {fieldName: 'languages', data: {
-                lang: 'English', 
-                C2: ['listening', 'reading'], 
-                C1: ['speaking', 'writing']
+                    lang: 'English',
+                    exp: {
+                        C2: ['listening', 'reading'],
+                        C1: ['speaking', 'writing']
+                    }
                 }
             },
-            {fieldName: 'education', data: {
-                main: {
-                    place: 'Kaunas University of technology',
-                    degree: 'Civil engineer, bachelors degree',
-                    date: '2010 - 2016'
-                },
-                secondary: {
+            {fieldName: 'education', data: [
+                {
                     place: 'Baltic Talents, Kaunas',
                     degree: 'Intensive programing course, PHP',
                     date: '2017 12 01 - 2018 02 01',
@@ -59,8 +56,14 @@ const store = new Vuex.Store({
                         'Basic concepts and syntax', 
                         'Algorithms'
                     ]
+                },
+                {
+                    place: 'Kaunas University of technology',
+                    degree: 'Civil engineer, bachelors degree',
+                    date: '2010 - 2016'
                 }
-            }},
+                ]
+            },
             {fieldName: 'profile', data: "I am working as a full stack web developer. I shifted my career about one year ago and it was one of the best decisions of my life. I am passionate about new technologies and this field does not stop to amaze me. I am constantly improving my skills by remote courses and tutorials." },
             {fieldName: 'experience', data: [
                 {
