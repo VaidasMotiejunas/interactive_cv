@@ -12,12 +12,34 @@ window.Vue = require('vue');
 import store from './store/store';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faArrowsAlt, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { 
+    faArrowsAlt, 
+    faEyeSlash, 
+    faEye, 
+    faTrashAlt, 
+    faPhone, 
+    faAt, 
+    faPencilAlt, 
+    faComment, 
+    faStar, 
+    faLightbulb, 
+    faBrain} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
     faArrowsAlt,
-    faEyeSlash
+    faEyeSlash,
+    faEye,
+    faTrashAlt,
+    faPhone,
+    faAt,
+    faLinkedin,
+    faPencilAlt,
+    faComment,
+    faStar,
+    faLightbulb,
+    faBrain
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

@@ -3,9 +3,9 @@
     <!-- SKILLS -->
     <div v-if="name == 'skills'">
         <div class="card-header">
-            <card-header :name="upperFirstLetter(name)"></card-header>
+            <card-header v-on:toggle-show-data="toggleShowData" :name="upperFirstLetter(name)"></card-header>
         </div>
-        <div class="card-body">
+        <div v-if="showData" class="card-body">
             <p class="card-text">
                 <span class="h6">{{arrayToList(this.data)}}</span>
             </p>
@@ -13,9 +13,9 @@
     </div>
     <div v-else-if="name == 'languages'">
         <div class="card-header">
-            <card-header :name="upperFirstLetter(name)"></card-header>
+            <card-header v-on:toggle-show-data="toggleShowData" :name="upperFirstLetter(name)"></card-header>
         </div>
-        <div class="card-body">
+        <div v-if="showData" class="card-body">
             <h5 class="card-title">{{data.lang}}</h5>
             <p class="card-text" v-for="key in objectKeys(data.exp)" :key="key.id">
                 {{key}}: {{arrayToList(data.exp[key])}}
@@ -24,9 +24,9 @@
     </div>
     <div v-else-if="name == 'education'">
         <div class="card-header">
-            <card-header :name="upperFirstLetter(name)"></card-header>
+            <card-header v-on:toggle-show-data="toggleShowData" :name="upperFirstLetter(name)"></card-header>
         </div>
-        <div class="card-body">
+        <div v-if="showData" class="card-body">
             <div v-for="study in data" :key="study.id">
                 <h5 class="card-title">
                     <strong>{{study.degree}}</strong>
@@ -43,9 +43,9 @@
     </div>
     <div v-else-if="name == 'profile'">
         <div class="card-header">
-            <card-header :name="upperFirstLetter(name)"></card-header>
+            <card-header v-on:toggle-show-data="toggleShowData" :name="upperFirstLetter(name)"></card-header>
         </div>
-        <div class="card-body">
+        <div v-if="showData" class="card-body">
             <p class="card-text">
                 {{data}}
             </p>
@@ -53,9 +53,9 @@
     </div>
     <div v-else>
         <div class="card-header">
-            <card-header :name="upperFirstLetter(name)"></card-header>
+            <card-header v-on:toggle-show-data="toggleShowData" :name="upperFirstLetter(name)"></card-header>
         </div>
-        <div class="card-body">
+        <div v-if="showData" class="card-body">
             <div v-for="exp in data" :key="exp.id">
                 <h5 class="card-title">
                     <strong>{{exp.name}}</strong>
@@ -83,7 +83,8 @@ export default {
     data() {
         return {
             data: this.element.data,
-            name: this.element.fieldName
+            name: this.element.fieldName,
+            showData: true,
         }
     },
 
@@ -103,6 +104,10 @@ export default {
 
         upperFirstLetter(name) {
             return name.charAt(0).toUpperCase()+name.slice(1);
+        },
+
+        toggleShowData() {
+            this.showData = !this.showData;
         }
 
     }

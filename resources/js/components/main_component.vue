@@ -1,14 +1,19 @@
 <template>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-2">
-                <div class="btn-group-vertical" role="group" aria-label="Left toolbar">
                     <!-- TODO create buttons dynamicaly based on personal data from store -->
-                    <button @click="addElement('skills')" type="button" class="btn btn-secondary">Skills</button>
-                    <button @click="addElement('languages')" type="button" class="btn btn-secondary">Languages</button>
-                    <button @click="addElement('education')" type="button" class="btn btn-secondary">Education</button>
-                    <button @click="addElement('profile')" type="button" class="btn btn-secondary">About me</button>
-                    <button @click="addElement('experience')" type="button" class="btn btn-secondary">Experience</button>
+                <div v-if="!showContacts">
+                    <button @click="showContacts = true; showAllElement = true" type="button" class="btn btn-secondary">Show Contacts</button>
+                </div>
+                <div v-if="showAllElement">
+                    <div class="btn-group-vertical" role="group" aria-label="Left toolbar">
+                        <button @click="addElement('skills')" type="button" class="btn btn-secondary">Skills</button>
+                        <button @click="addElement('languages')" type="button" class="btn btn-secondary">Languages</button>
+                        <button @click="addElement('education')" type="button" class="btn btn-secondary">Education</button>
+                        <button @click="addElement('profile')" type="button" class="btn btn-secondary">About me</button>
+                        <button @click="addElement('experience')" type="button" class="btn btn-secondary">Experience</button>
+                    </div>
                 </div>
             </div>
             <div class="col-10">
@@ -17,15 +22,17 @@
                         Picture select
                     </div>
                     <div class="col-8">
-                        <div class="row">
-                            <div class="col-12">
-                                <p class="lead">{{ changeContacts.name }}</p>
+                        <div v-if="showContacts" class="card">
+                            <div class="card-header">
+                                <p class="h4">
+                                    {{changeContacts.name}}
+                                </p>
                             </div>
-                            <div class="col-12">
-                                <ul class="list-group list-group-horizontal">
-                                    <li class="list-group-item">{{ changeContacts.email }}</li>
-                                    <li class="list-group-item">{{ changeContacts.tel }}</li>
-                                    <li class="list-group-item">{{ changeContacts.linkedIn }}</li>
+                            <div class="card-body">
+                                 <ul class="list-group list-group-sm">
+                                    <li class="list-group-item"><font-awesome-icon icon="at" size="lg"></font-awesome-icon> {{changeContacts.email}}</li>
+                                    <li class="list-group-item"><font-awesome-icon icon="phone" size="lg"></font-awesome-icon> {{changeContacts.tel}}</li>
+                                    <li class="list-group-item"><font-awesome-icon :icon="[ 'fab', 'linkedin' ]" size="lg"></font-awesome-icon> {{changeContacts.linkedIn}}</li>
                                 </ul>
                             </div>
                         </div>
@@ -33,13 +40,14 @@
                     <div class="col-12">
                         <draggable
                             :list="mainList"
-                            :options="{group: 'listItems', handle: '.handle', animation: '150'}"
+                            group="listItems"
+                            handle=".handle"
+                            @start="drag=true" 
+                            @end="drag=false"
                         >
-                            <element-component v-for="(element) in mainList"
-                                @change="changeElementOrder"
-                                :key="element.id"
+                            <!-- key has to be existing value for draggable to corectly update view -->
+                            <element-component v-for="(element) in mainList" :key="element.fieldName"
                                 :element="element"
-                                :options="{group: 'main', handle: '.handle', animation: '150'}"
                                 v-on:delete-element="deleteElement(element)"
                             ></element-component>
                         </draggable>
@@ -55,6 +63,7 @@
 
 import { mapGetters } from 'vuex';
 import draggable from 'vuedraggable';
+import { EventBus } from '../event/event-bus';
 
     export default {
 
@@ -62,6 +71,8 @@ import draggable from 'vuedraggable';
             return {
                 mainList: [],
                 contacts: [],
+                showContacts: false,
+                showAllElement: false,
             }
         },
 
@@ -71,6 +82,10 @@ import draggable from 'vuedraggable';
 
         mounted () {
             this.getDataField('contacts');
+
+            EventBus.$on('delete-element', (payload) => {
+                this.deleteElement(payload);
+            });
         },
 
         computed: {
@@ -91,10 +106,6 @@ import draggable from 'vuedraggable';
         
         methods: {
 
-            changeElementOrder(){
-                //TODO change element order in mainList
-            },
-
             getDataField(name, prop) {
                 this.personalData.forEach(element => {
                     if(element.fieldName == name)
@@ -105,6 +116,10 @@ import draggable from 'vuedraggable';
                 });
             },
 
+            /**
+             * Inserts new element from vuex store to mainList by provided element type
+             * Skips if element is already in the array
+             */
             addElement(type) {
                 var element = this.$store.getters.getFieldByName(type);
 
@@ -122,9 +137,16 @@ import draggable from 'vuedraggable';
                 }
             },
 
-            deleteElement(element) {
-                // TODO create method for deleting
-                console.log(element);
+            /**
+             * Deletes an element from mainList based on emited element name
+             */
+            deleteElement(name) {
+                this.mainList.forEach(element => {
+                    if(element.fieldName == name.toLowerCase())
+                    {
+                        this.mainList.splice(this.mainList.indexOf(element), 1);
+                    }
+                })
             }
         }
 
