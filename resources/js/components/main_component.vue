@@ -15,6 +15,7 @@
             <div class="col-10">
                 <div class="row">
                     <div class="col-4">
+                        <!-- TODO add picture select -->
                         Picture select
                     </div>
                     <div class="col-8">
