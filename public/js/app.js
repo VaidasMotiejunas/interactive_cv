@@ -14397,10 +14397,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -14409,8 +14405,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       mainList: [],
       contacts: [],
-      showContacts: false,
-      showAllElement: false
+      showContacts: false
     };
   },
   components: {
@@ -14427,6 +14422,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
     personalData: 'personalData'
   }), {
+    /**
+     * Toggles disabled attribute based on showContacts data property
+     */
+    dynamicContactButton: function dynamicContactButton() {
+      return this.showContacts ? true : false;
+    },
     // TODO is it really neccessary to have a computed property for this ?
     changeContacts: {
       get: function get() {
@@ -14438,6 +14439,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   methods: {
+    /**
+     * Toggles disabled attribute
+     * Returns true if showContcts == false
+     * Returns true if the element coresponding to button type is already added to mainList
+     */
+    dynamicButtons: function dynamicButtons(type) {
+      if (this.showContacts) {
+        var disabled = false;
+        this.mainList.forEach(function (element) {
+          if (type == element.fieldName) {
+            disabled = true;
+          }
+        });
+        return disabled;
+      } else {
+        return true;
+      }
+    },
     getDataField: function getDataField(name, prop) {
       var _this2 = this;
 
@@ -52210,107 +52229,113 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-2" }, [
-        !_vm.showContacts
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      _vm.showContacts = true
-                      _vm.showAllElement = true
-                    }
+        _c(
+          "div",
+          {
+            staticClass: "btn-group-vertical",
+            attrs: { role: "group", "aria-label": "Left toolbar" }
+          },
+          [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: { type: "button", disabled: _vm.dynamicContactButton },
+                on: {
+                  click: function($event) {
+                    _vm.showContacts = true
                   }
+                }
+              },
+              [_vm._v("Show Contacts")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: {
+                  type: "button",
+                  disabled: _vm.dynamicButtons("skills")
                 },
-                [_vm._v("Show Contacts")]
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.showAllElement
-          ? _c("div", [
-              _c(
-                "div",
-                {
-                  staticClass: "btn-group-vertical",
-                  attrs: { role: "group", "aria-label": "Left toolbar" }
+                on: {
+                  click: function($event) {
+                    return _vm.addElement("skills")
+                  }
+                }
+              },
+              [_vm._v("Skills")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: {
+                  type: "button",
+                  disabled: _vm.dynamicButtons("languages")
                 },
-                [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.addElement("skills")
-                        }
-                      }
-                    },
-                    [_vm._v("Skills")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.addElement("languages")
-                        }
-                      }
-                    },
-                    [_vm._v("Languages")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.addElement("education")
-                        }
-                      }
-                    },
-                    [_vm._v("Education")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.addElement("profile")
-                        }
-                      }
-                    },
-                    [_vm._v("About me")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.addElement("experience")
-                        }
-                      }
-                    },
-                    [_vm._v("Experience")]
-                  )
-                ]
-              )
-            ])
-          : _vm._e()
+                on: {
+                  click: function($event) {
+                    return _vm.addElement("languages")
+                  }
+                }
+              },
+              [_vm._v("Languages")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: {
+                  type: "button",
+                  disabled: _vm.dynamicButtons("education")
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.addElement("education")
+                  }
+                }
+              },
+              [_vm._v("Education")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: {
+                  type: "button",
+                  disabled: _vm.dynamicButtons("profile")
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.addElement("profile")
+                  }
+                }
+              },
+              [_vm._v("About me")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: {
+                  type: "button",
+                  disabled: _vm.dynamicButtons("experience")
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.addElement("experience")
+                  }
+                }
+              },
+              [_vm._v("Experience")]
+            )
+          ]
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-10" }, [

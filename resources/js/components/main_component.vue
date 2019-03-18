@@ -3,17 +3,13 @@
         <div class="row">
             <div class="col-2">
                     <!-- TODO create buttons dynamicaly based on personal data from store -->
-                <div v-if="!showContacts">
-                    <button @click="showContacts = true; showAllElement = true" type="button" class="btn btn-secondary">Show Contacts</button>
-                </div>
-                <div v-if="showAllElement">
-                    <div class="btn-group-vertical" role="group" aria-label="Left toolbar">
-                        <button @click="addElement('skills')" type="button" class="btn btn-secondary">Skills</button>
-                        <button @click="addElement('languages')" type="button" class="btn btn-secondary">Languages</button>
-                        <button @click="addElement('education')" type="button" class="btn btn-secondary">Education</button>
-                        <button @click="addElement('profile')" type="button" class="btn btn-secondary">About me</button>
-                        <button @click="addElement('experience')" type="button" class="btn btn-secondary">Experience</button>
-                    </div>
+                <div class="btn-group-vertical" role="group" aria-label="Left toolbar">
+                    <button @click="showContacts = true" type="button" class="btn btn-secondary" :disabled="dynamicContactButton">Show Contacts</button>
+                    <button @click="addElement('skills')" type="button" class="btn btn-secondary" :disabled="dynamicButtons('skills')" >Skills</button>
+                    <button @click="addElement('languages')" type="button" class="btn btn-secondary" :disabled="dynamicButtons('languages')" >Languages</button>
+                    <button @click="addElement('education')" type="button" class="btn btn-secondary" :disabled="dynamicButtons('education')" >Education</button>
+                    <button @click="addElement('profile')" type="button" class="btn btn-secondary" :disabled="dynamicButtons('profile')" >About me</button>
+                    <button @click="addElement('experience')" type="button" class="btn btn-secondary" :disabled="dynamicButtons('experience')" >Experience</button>
                 </div>
             </div>
             <div class="col-10">
@@ -72,7 +68,6 @@ import { EventBus } from '../event/event-bus';
                 mainList: [],
                 contacts: [],
                 showContacts: false,
-                showAllElement: false,
             }
         },
 
@@ -93,6 +88,13 @@ import { EventBus } from '../event/event-bus';
                 personalData: 'personalData',
             }),
 
+            /**
+             * Toggles disabled attribute based on showContacts data property
+             */
+            dynamicContactButton() {
+                return this.showContacts ? true : false;
+            },
+
             // TODO is it really neccessary to have a computed property for this ?
             changeContacts: {
                 get() {
@@ -105,6 +107,31 @@ import { EventBus } from '../event/event-bus';
         },
         
         methods: {
+
+            /**
+             * Toggles disabled attribute
+             * Returns true if showContcts == false
+             * Returns true if the element coresponding to button type is already added to mainList
+             */
+            dynamicButtons(type) {
+
+                if(this.showContacts)
+                {
+                    var disabled = false;
+                    this.mainList.forEach(element => {
+                        if(type == element.fieldName)
+                        {
+                            disabled = true;
+                        }
+                    })
+                    return disabled;
+                }
+                else
+                {
+                    return true;
+                }
+
+            },
 
             getDataField(name, prop) {
                 this.personalData.forEach(element => {
